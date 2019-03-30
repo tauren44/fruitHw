@@ -16,11 +16,7 @@ public class FruitStore {
     private static final Logger LOGGER = Logger.getLogger(FruitStore.class);
     private List<Fruit> fruitsStorage = new ArrayList<>();
     private ObjectMapper mapper = new ObjectMapper();
-
-    public FruitStore() {
-
-    }
-
+    
     public void addFruits(String pathToJsonFile) {
         List<Fruit> supply;
         try (FileInputStream inputStream = new FileInputStream(pathToJsonFile)) {
@@ -28,7 +24,7 @@ public class FruitStore {
             });
             fruitsStorage.addAll(supply);
         } catch (IOException e) {
-            LOGGER.info("Exception thrown: ", e);
+            LOGGER.error("Exception thrown: ", e);
         }
     }
 
@@ -36,7 +32,7 @@ public class FruitStore {
         try (FileOutputStream outputStream = new FileOutputStream(pathToJsonFile)) {
             mapper.writeValue(outputStream, fruitsStorage);
         } catch (IOException e) {
-            LOGGER.info("Exception thrown: ", e);
+            LOGGER.error("Exception thrown: ", e);
         }
     }
 
@@ -46,7 +42,7 @@ public class FruitStore {
             fruitsStorage = mapper.readValue(inputStream, new TypeReference<List<Fruit>>() {
             });
         } catch (IOException e) {
-            LOGGER.info("Exception thrown: ", e);
+            LOGGER.error("Exception thrown: ", e);
         }
     }
 
@@ -69,7 +65,7 @@ public class FruitStore {
     public List<Fruit> getAddedFruits(LocalDate date) {
         List<Fruit> listOfAddedFruits = new ArrayList<>();
         fruitsStorage.forEach(fruit -> {
-            LocalDate dateOfDelivery = fruit.convertStringToDate(fruit.getDateOfDelivery());
+            LocalDate dateOfDelivery = FruitUtil.convertStringToDate(fruit.getDateOfDelivery());
             if (dateOfDelivery.isEqual(date)) {
                 listOfAddedFruits.add(fruit);
             }

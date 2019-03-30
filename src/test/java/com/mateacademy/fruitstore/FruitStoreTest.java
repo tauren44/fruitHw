@@ -1,5 +1,6 @@
 package com.mateacademy.fruitstore;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.After;
@@ -22,6 +23,8 @@ public class FruitStoreTest {
     private static final String FIRST_FILE_PATH = "firstFile.json";
     private static final String DATABASE_PATH = "dataBase.json";
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final Logger LOGGER = Logger.getLogger(FruitStoreTest.class);
+
     private FruitStore store;
     private List<Fruit> fruits;
 
@@ -39,6 +42,7 @@ public class FruitStoreTest {
         try (FileOutputStream outputStream = new FileOutputStream(FIRST_FILE_PATH)) {
             MAPPER.writeValue(outputStream, fruits);
         } catch (IOException e) {
+            LOGGER.error("Exception thrown: ", e);
         }
     }
 
@@ -48,13 +52,13 @@ public class FruitStoreTest {
         try {
             writer = new PrintWriter(FIRST_FILE_PATH);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.error("Exception thrown: ", e);
         }
         writer.print("");
         try {
             writer = new PrintWriter(DATABASE_PATH);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.error("Exception thrown: ", e);
         }
         writer.print("");
         writer.close();
@@ -75,6 +79,7 @@ public class FruitStoreTest {
             expected = MAPPER.readValue(inputStream, new TypeReference<List<Fruit>>() {
             });
         } catch (IOException e) {
+            LOGGER.error("Exception thrown: ", e);
         }
         assertTrue(fruits.containsAll(expected));
     }
@@ -85,7 +90,7 @@ public class FruitStoreTest {
         try (FileOutputStream outputStream = new FileOutputStream(DATABASE_PATH)) {
             MAPPER.writeValue(outputStream, store.getFruitsStorage());
         } catch (IOException e) {
-
+            LOGGER.error("Exception thrown: ", e);
         }
         store.load(DATABASE_PATH);
         assertTrue(fruits.containsAll(store.getFruitsStorage()));

@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -19,14 +18,9 @@ public class Fruit {
     private int shelfLife;
     private String dateOfDelivery;
 
-    public LocalDate convertStringToDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-        return LocalDate.parse(date, formatter);
-    }
-
     @JsonIgnore
     public LocalDate getDateOfSpoil() {
-        LocalDate dateOfDelivery = convertStringToDate(getDateOfDelivery());
+        LocalDate dateOfDelivery = FruitUtil.convertStringToDate(getDateOfDelivery());
         return dateOfDelivery.plusDays(getShelfLife());
     }
 

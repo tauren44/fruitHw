@@ -18,7 +18,7 @@ public class FruitTest {
     @Test
     public void convertStringToDate() {
         LocalDate expected = LocalDate.of(2019, 3 ,29);
-        LocalDate actual = apple.convertStringToDate(apple.getDateOfDelivery());
+        LocalDate actual = FruitUtil.convertStringToDate(apple.getDateOfDelivery());
         assertTrue(actual.isEqual(expected));
     }
 
